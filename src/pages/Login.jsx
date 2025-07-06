@@ -35,7 +35,7 @@ const Login = () => {
       client_id: clientId,
       redirect_uri: redirectUri,
       state: state,
-      scope: 'api refresh_token full' // Full scope for REST API
+      scope: 'api' // Minimal scope - just API access
     });
 
     const authUrl = `${loginUrl}/services/oauth2/authorize?${params.toString()}`;
