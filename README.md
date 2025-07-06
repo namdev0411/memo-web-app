@@ -165,6 +165,44 @@ Home → New Memo → Back to Home
 
 ## 🚨 Troubleshooting
 
+### Lỗi 404 khi deploy (SPA Routing)
+Đây là lỗi phổ biến với React Router. Server không biết xử lý client-side routes.
+
+#### ✅ **Solutions theo platform:**
+
+**Vercel**: File `vercel.json` đã có sẵn (OK)
+
+**Netlify**: File `public/_redirects` đã tạo:
+```
+/*    /index.html   200
+```
+
+**Apache**: File `public/.htaccess` đã tạo
+
+**Nginx**: Sử dụng config trong `nginx.conf`
+
+**GitHub Pages**: Thêm vào `package.json`:
+```json
+"homepage": "https://yourusername.github.io/repo-name"
+```
+
+#### 🔍 **Debug steps:**
+1. **Check build output**:
+   ```bash
+   npm run build
+   ls dist/  # Phải có index.html, assets/, etc.
+   ```
+
+2. **Test local build**:
+   ```bash
+   npm run preview
+   # Navigate to different routes để test
+   ```
+
+3. **Check deployment logs** trên platform dashboard
+
+4. **Verify environment variables** đã set đúng
+
 ### Lỗi CORS
 - Đảm bảo Salesforce Connected App có đúng callback URL
 - Sử dụng Implicit Grant thay vì Authorization Code Grant
@@ -180,6 +218,26 @@ Home → New Memo → Back to Home
 ### Environment Issues
 - Đảm bảo tất cả biến môi trường được set đúng
 - Restart development server sau khi thay đổi .env.local
+
+### Common Deploy Issues
+
+#### Build fails:
+```bash
+# Clear cache và reinstall
+rm -rf node_modules package-lock.json
+npm install
+npm run build
+```
+
+#### Blank page after deploy:
+- Check browser console for errors
+- Verify base URL trong Vite config
+- Check if all assets load correctly
+
+#### OAuth redirect fails:
+- Update Salesforce Connected App callback URL
+- Use HTTPS URL của deployed app
+- Check CORS settings
 
 ## 📝 Development Notes
 
