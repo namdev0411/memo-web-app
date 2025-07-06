@@ -1,0 +1,76 @@
+{
+    "common": {
+        "loading": "Đang tải...",
+        "save": "Lưu",
+        "cancel": "Hủy bỏ",
+        "delete": "Xóa",
+        "edit": "Chỉnh sửa",
+        "view": "Xem",
+        "back": "Quay lại",
+        "search": "Tìm kiếm",
+        "refresh": "Làm mới",
+        "logout": "Đăng xuất",
+        "login": "Đăng nhập",
+        "yes": "Có",
+        "no": "Không",
+        "confirm": "Xác nhận",
+        "close": "Đóng",
+        "next": "Tiếp theo",
+        "previous": "Trước đó"
+    },
+    "auth": {
+        "loginWithSalesforce": "Đăng nhập với Salesforce",
+        "loggingIn": "Đang đăng nhập...",
+        "loginRequired": "Vui lòng đăng nhập để tiếp tục",
+        "loginSuccess": "Đăng nhập thành công",
+        "loginError": "Đăng nhập thất bại. Vui lòng thử lại.",
+        "logoutSuccess": "Đăng xuất thành công",
+        "authenticating": "Đang xác thực...",
+        "redirecting": "Đang chuyển hướng..."
+    },
+    "memo": {
+        "title": "Tiêu đề",
+        "description": "Mô tả",
+        "content": "Nội dung",
+        "memos": "Ghi chú",
+        "manageMemos": "Quản lý ghi chú của bạn",
+        "newMemo": "Ghi chú mới",
+        "addNewMemo": "Thêm ghi chú mới",
+        "editMemo": "Chỉnh sửa ghi chú",
+        "viewMemo": "Xem ghi chú",
+        "saveMemo": "Lưu ghi chú",
+        "deleteMemo": "Xóa ghi chú",
+        "memoSaved": "Ghi chú đã được lưu thành công",
+        "memoDeleted": "Ghi chú đã được xóa thành công",
+        "memoError": "Lỗi khi xử lý ghi chú",
+        "noMemos": "Không tìm thấy ghi chú nào",
+        "searchMemos": "Tìm kiếm ghi chú...",
+        "titleRequired": "Tiêu đề là bắt buộc",
+        "descriptionRequired": "Mô tả là bắt buộc",
+        "contentRequired": "Nội dung là bắt buộc",
+        "confirmDelete": "Bạn có chắc chắn muốn xóa ghi chú này?",
+        "deleteMemoTitle": "Xóa ghi chú",
+        "lastModified": "Sửa đổi lần cuối",
+        "createdAt": "Được tạo lúc"
+    },
+    "navigation": {
+        "home": "Trang chủ",
+        "dashboard": "Bảng điều khiển",
+        "profile": "Hồ sơ",
+        "settings": "Cài đặt"
+    },
+    "errors": {
+        "notFound": "Không tìm thấy trang",
+        "serverError": "Đã xảy ra lỗi máy chủ",
+        "networkError": "Lỗi kết nối mạng",
+        "unauthorized": "Bạn không có quyền truy cập tài nguyên này",
+        "tryAgain": "Vui lòng thử lại",
+        "somethingWentWrong": "Đã có lỗi xảy ra"
+    },
+    "language": {
+        "selectLanguage": "Chọn ngôn ngữ",
+        "english": "English",
+        "vietnamese": "Tiếng Việt",
+        "japanese": "日本語"
+    }
+}

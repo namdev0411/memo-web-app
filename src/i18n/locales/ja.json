@@ -1,0 +1,76 @@
+{
+    "common": {
+        "loading": "読み込み中...",
+        "save": "保存",
+        "cancel": "キャンセル",
+        "delete": "削除",
+        "edit": "編集",
+        "view": "表示",
+        "back": "戻る",
+        "search": "検索",
+        "refresh": "更新",
+        "logout": "ログアウト",
+        "login": "ログイン",
+        "yes": "はい",
+        "no": "いいえ",
+        "confirm": "確認",
+        "close": "閉じる",
+        "next": "次へ",
+        "previous": "前へ"
+    },
+    "auth": {
+        "loginWithSalesforce": "Salesforceでログイン",
+        "loggingIn": "ログイン中...",
+        "loginRequired": "続行するにはログインしてください",
+        "loginSuccess": "ログインに成功しました",
+        "loginError": "ログインに失敗しました。もう一度お試しください。",
+        "logoutSuccess": "正常にログアウトしました",
+        "authenticating": "認証中...",
+        "redirecting": "リダイレクト中..."
+    },
+    "memo": {
+        "title": "タイトル",
+        "description": "説明",
+        "content": "内容",
+        "memos": "メモ",
+        "manageMemos": "メモを管理する",
+        "newMemo": "新しいメモ",
+        "addNewMemo": "新しいメモを追加",
+        "editMemo": "メモを編集",
+        "viewMemo": "メモを表示",
+        "saveMemo": "メモを保存",
+        "deleteMemo": "メモを削除",
+        "memoSaved": "メモが正常に保存されました",
+        "memoDeleted": "メモが正常に削除されました",
+        "memoError": "メモの処理中にエラーが発生しました",
+        "noMemos": "メモが見つかりません",
+        "searchMemos": "メモを検索...",
+        "titleRequired": "タイトルは必須です",
+        "descriptionRequired": "説明は必須です",
+        "contentRequired": "内容は必須です",
+        "confirmDelete": "本当にこのメモを削除しますか？",
+        "deleteMemoTitle": "メモを削除",
+        "lastModified": "最終更新日",
+        "createdAt": "作成日"
+    },
+    "navigation": {
+        "home": "ホーム",
+        "dashboard": "ダッシュボード",
+        "profile": "プロフィール",
+        "settings": "設定"
+    },
+    "errors": {
+        "notFound": "ページが見つかりません",
+        "serverError": "サーバーエラーが発生しました",
+        "networkError": "ネットワーク接続エラー",
+        "unauthorized": "このリソースにアクセスする権限がありません",
+        "tryAgain": "もう一度お試しください",
+        "somethingWentWrong": "何かが間違っています"
+    },
+    "language": {
+        "selectLanguage": "言語を選択",
+        "english": "English",
+        "vietnamese": "Tiếng Việt",
+        "japanese": "日本語"
+    }
+}

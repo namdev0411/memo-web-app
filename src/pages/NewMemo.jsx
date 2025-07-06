@@ -1,36 +1,67 @@
-import React from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import MemoForm from '../components/MemoForm';
-import { Link } from 'react-router-dom';
+import axios from '../utils/axios';
 
 const NewMemo = () => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (memoData) => {
+    setLoading(true);
+    try {
+      const response = await axios.post('/api/memo', memoData);
+
+      if (response.data.success) {
+        console.log('✅ Memo created successfully:', response.data.data);
+        navigate('/');
+      } else {
+        console.error('❌ Failed to create memo:', response.data.message);
+        alert(t('memo.memoError') + ': ' + response.data.message);
+      }
+    } catch (error) {
+      console.error('❌ Error creating memo:', error);
+      alert(t('memo.memoError') + ': ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    navigate('/');
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center py-4">
-            <Link to="/" className="flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200 mr-4">
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              Quay lại
-            </Link>
-            <div className="flex items-center space-x-3">
-              <div className="h-8 w-8 flex items-center justify-center rounded-lg bg-gradient-to-r from-green-500 to-green-600">
-                <span className="text-lg">➕</span>
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">Tạo Memo mới</h1>
-                <p className="text-sm text-gray-500">Thêm memo mới vào danh sách</p>
-              </div>
-            </div>
-          </div>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t('memo.newMemo')}</h1>
+          <p className="text-gray-600 text-sm sm:text-base mt-1">{t('memo.addNewMemo')}</p>
         </div>
+
+        <button
+          onClick={handleCancel}
+          className="flex items-center space-x-2 px-4 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200 self-start sm:self-auto"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span>{t('common.back')}</span>
+        </button>
       </div>
 
-      {/* Main content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <MemoForm />
+      {/* Form */}
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+        <div className="p-4 sm:p-6">
+          <MemoForm
+            onSubmit={handleSubmit}
+            onCancel={handleCancel}
+            loading={loading}
+          />
+        </div>
       </div>
     </div>
   );

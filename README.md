@@ -88,6 +88,22 @@ Sao chép và deploy các file Apex từ thư mục `salesforce/`:
 - `MemoRegistration.cls` - REST API cho CRUD operations
 - `MemoUpdate.cls` (nếu có) - Additional REST endpoints
 
+#### d) Cấu hình CORS Settings (Bắt buộc):
+
+1. **Setup** → **Security** → **CORS**
+2. **New** → **Origin URL Pattern**: Thêm cả 2 domains:
+   - `http://localhost:3000` (cho development)
+   - `https://your-vercel-domain.vercel.app` (cho production)
+3. **Ví dụ**: 
+   - `http://localhost:3000`
+   - `https://memo-web-app-psi.vercel.app`
+4. **Save**
+
+⚠️ **Lưu ý CORS**: 
+- **Bắt buộc** cho cả development và production
+- Nếu không có CORS, API calls sẽ bị chặn
+- Phải setup trước khi chạy app hoặc deploy
+
 ### 4. Chạy ứng dụng
 
 ```bash
@@ -131,6 +147,17 @@ Home → New Memo → Back to Home
 | `VITE_SALESFORCE_API_BASE_URL` | API endpoint cho Apex REST | `https://domain.my.salesforce.com/services/apexrest` |
 | `VITE_REDIRECT_URI` | OAuth callback URL | `http://localhost:3000/auth/callback` |
 
+### CORS Configuration (Bắt buộc cho mọi environment)
+
+| Bước | Mô tả | Example |
+|------|-------|---------|
+| **1. Salesforce CORS Setup** | Setup → Security → CORS → New | Thêm từng domain riêng |
+| **2. Development Domain** | `http://localhost:3000` | Exact match, không trailing slash |
+| **3. Production Domain** | `https://your-vercel-domain.vercel.app` | Exact match với deployed domain |
+| **4. Multiple Entries** | Tạo riêng entry cho mỗi domain | Không thể dùng wildcard |
+
+⚠️ **Lưu ý**: CORS là bắt buộc cho cả development và production. Không có CORS = API calls bị block!
+
 ### OAuth2 Flow
 
 1. **Authorization Request**: User click → Redirect to Salesforce
@@ -163,30 +190,57 @@ Home → New Memo → Back to Home
 - **Cards**: Shadow, hover effects, clean layout
 - **Navigation**: Breadcrumbs, back buttons, intuitive flow
 
-## 🚨 Troubleshooting
+## � Deployment
 
-### Lỗi 404 khi deploy (SPA Routing)
-Đây là lỗi phổ biến với React Router. Server không biết xử lý client-side routes.
+### Quick Deploy với Vercel (Recommended)
 
-#### ✅ **Solutions theo platform:**
+1. **Connect GitHub repo**: 
+   - Login vào [vercel.com](https://vercel.com)
+   - Import project từ GitHub
 
-**Vercel**: File `vercel.json` đã có sẵn (OK)
+2. **Environment Variables** (Settings → Environment Variables):
+   ```bash
+   VITE_SF_CLIENT_ID=your_consumer_key
+   VITE_SF_CLIENT_SECRET=your_consumer_secret  
+   VITE_SALESFORCE_LOGIN_URL=https://domain.my.salesforce.com
+   VITE_SALESFORCE_API_BASE_URL=https://domain.my.salesforce.com/services/apexrest
+   VITE_REDIRECT_URI=https://your-app.vercel.app/auth/callback
+   ```
 
-**Netlify**: File `public/_redirects` đã tạo:
+3. **Deploy**: Vercel tự động build và deploy khi push code
+
+4. **Update Salesforce CORS**: Thêm domain production vào CORS settings
+   - Example: `https://memo-app-xyz.vercel.app`
+
+### Alternative Deployment Options
+
+#### Netlify
+Tạo file `public/_redirects`:
 ```
 /*    /index.html   200
 ```
 
-**Apache**: File `public/.htaccess` đã tạo
-
-**Nginx**: Sử dụng config trong `nginx.conf`
-
-**GitHub Pages**: Thêm vào `package.json`:
+#### GitHub Pages  
+Thêm vào `package.json`:
 ```json
 "homepage": "https://yourusername.github.io/repo-name"
 ```
 
-#### 🔍 **Debug steps:**
+#### Apache Server
+Tạo file `public/.htaccess`:
+```apache
+Options -MultiViews
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.html [QSA,L]
+```
+
+## 🚨 Troubleshooting
+
+### Lỗi 404 khi deploy (SPA Routing)
+File `vercel.json` đã được cấu hình để handle client-side routing ✅
+
+#### Debug steps nếu vẫn gặp lỗi:
 1. **Check build output**:
    ```bash
    npm run build
@@ -199,13 +253,35 @@ Home → New Memo → Back to Home
    # Navigate to different routes để test
    ```
 
-3. **Check deployment logs** trên platform dashboard
-
-4. **Verify environment variables** đã set đúng
+3. **Check deployment logs** trên Vercel dashboard
+4. **Verify environment variables** đã set đúng trên Vercel
 
 ### Lỗi CORS
-- Đảm bảo Salesforce Connected App có đúng callback URL
-- Sử dụng Implicit Grant thay vì Authorization Code Grant
+- **Setup CORS trong Salesforce**: Setup → Security → CORS → Add Origin URL
+- **Development**: `http://localhost:3000`
+- **Production**: `https://your-app.vercel.app`
+- **Bắt buộc cho cả 2**: API calls sẽ bị block nếu thiếu bất kỳ entry nào
+
+#### CORS Setup Chi tiết:
+1. **Salesforce Setup** → **Security** → **CORS**
+2. **New CORS Entry** (tạo 2 entries riêng biệt):
+   
+   **Entry 1 - Development**:
+   - **Origin URL Pattern**: `http://localhost:3000`
+   
+   **Entry 2 - Production**:
+   - **Origin URL Pattern**: `https://your-app.vercel.app`
+
+3. **Save** cả 2 entries
+   
+   **Entry 2 - Production**:
+   - **Origin URL Pattern**: `https://your-vercel-domain.vercel.app`
+   
+3. **Important Notes**:
+   - **Exact match**: Phải chính xác domain và port
+   - **No wildcards**: Không thể dùng `*` hoặc patterns
+   - **Both required**: Cần cả 2 cho dev và prod
+4. **Multiple environments**: Staging, UAT cũng cần entries riêng
 
 ### Token hết hạn
 - App tự động detect token expiry
