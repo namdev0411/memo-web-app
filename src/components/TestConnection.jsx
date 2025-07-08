@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import axios from '../utils/axios';
+import { testConnection as testConnectionService } from '../services/memoService';
+import { getAccessToken, getInstanceUrl } from '../utils/auth.js';
 
 const TestConnection = () => {
   const [testResult, setTestResult] = useState(null);
@@ -8,30 +9,30 @@ const TestConnection = () => {
   const testConnection = async () => {
     setTesting(true);
     setTestResult(null);
-    
+
     try {
-      const accessToken = localStorage.getItem('salesforce_access_token');
-      const instanceUrl = localStorage.getItem('salesforce_instance_url');
-      
+      const accessToken = getAccessToken();
+      const instanceUrl = getInstanceUrl();
+
       console.log('🧪 Test connection với:', {
         hasToken: !!accessToken,
         instanceUrl,
         tokenPrefix: accessToken ? accessToken.substring(0, 20) + '...' : 'N/A'
       });
-      
+
       // Test với API endpoint memo
-      const response = await axios.get('/api/memo');
-      
+      const response = await testConnectionService();
+
       setTestResult({
         success: true,
         message: 'Kết nối thành công!',
-        data: response.data,
-        status: response.status
+        data: response,
+        status: 200
       });
-      
+
     } catch (error) {
       console.error('❌ Test connection failed:', error);
-      
+
       setTestResult({
         success: false,
         message: 'Kết nối thất bại',
@@ -62,7 +63,7 @@ const TestConnection = () => {
           )}
         </button>
       </div>
-      
+
       {testResult && (
         <div className={`rounded-lg p-4 ${testResult.success ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
           <div className="flex items-center mb-2">
@@ -82,13 +83,13 @@ const TestConnection = () => {
               <span className="ml-2 text-sm text-gray-500">(Status: {testResult.status})</span>
             )}
           </div>
-          
+
           <pre className="text-xs bg-gray-100 p-3 rounded mt-2 overflow-auto">
             {JSON.stringify(testResult.success ? testResult.data : testResult.error, null, 2)}
           </pre>
         </div>
       )}
-      
+
       <div className="mt-4 text-sm text-gray-600">
         <p>🔍 Test này sẽ gọi API <code>/api/memo</code> để kiểm tra:</p>
         <ul className="list-disc list-inside mt-2 space-y-1">

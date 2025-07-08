@@ -16,7 +16,8 @@
         "confirm": "確認",
         "close": "閉じる",
         "next": "次へ",
-        "previous": "前へ"
+        "previous": "前へ",
+        "preview": "プレビュー"
     },
     "auth": {
         "loginWithSalesforce": "Salesforceでログイン",
@@ -51,7 +52,13 @@
         "confirmDelete": "本当にこのメモを削除しますか？",
         "deleteMemoTitle": "メモを削除",
         "lastModified": "最終更新日",
-        "createdAt": "作成日"
+        "createdAt": "作成日",
+        "htmlSupported": "（HTML対応）",
+        "htmlSupportedHint": "リッチフォーマットのHTMLタグに対応",
+        "markdownSupported": "リッチフォーマットのMarkdown対応",
+        "richTextSupported": "リッチテキスト書式設定に対応",
+        "useToolbarFormatting": "太字、斜体、リストなどはツールバーを使用",
+        "charactersNoHTML": "文字（HTML除く）"
     },
     "navigation": {
         "home": "ホーム",

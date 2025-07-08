@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import axios from '../utils/axios';
+import { getAllMemos, deleteMemo } from '../services/memoService';
+import { truncateHtml } from '../utils/htmlUtils';
 
 const MemoList = () => {
   const [memos, setMemos] = useState([]);
@@ -17,14 +18,14 @@ const MemoList = () => {
   const fetchMemos = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/memo');
+      const response = await getAllMemos();
 
-      if (response.data.success) {
-        setMemos(response.data.data || []);
-        console.log('✅ Loaded memos:', response.data.data?.length || 0);
+      if (response.success) {
+        setMemos(response.data || []);
+        console.log('✅ Loaded memos:', response.data?.length || 0);
       } else {
-        console.error('❌ API error:', response.data.message);
-        setError(response.data.message);
+        console.error('❌ API error:', response.message);
+        setError(response.message);
       }
     } catch (err) {
       console.error('❌ Cannot load memo list:', err);
@@ -37,11 +38,11 @@ const MemoList = () => {
   const handleDelete = async (id) => {
     if (window.confirm(t('memo.confirmDelete'))) {
       try {
-        const response = await axios.delete(`/api/memo/${id}`);
-        if (response.data.success) {
+        const response = await deleteMemo(id);
+        if (response.success) {
           setMemos(memos.filter(m => m.id !== id));
         } else {
-          alert(t('errors.somethingWentWrong') + ': ' + response.data.message);
+          alert(t('errors.somethingWentWrong') + ': ' + response.message);
         }
       } catch (err) {
         alert(t('memo.memoError') + ': ' + err.message);
@@ -133,7 +134,7 @@ const MemoList = () => {
               className="text-gray-600 text-sm line-clamp-3 mb-4 cursor-pointer hover:text-gray-800 transition-colors"
               onClick={() => navigate(`/memo/${memo.id}`)}
             >
-              {memo.description}
+              {truncateHtml(memo.description, 100)}
             </p>
 
             <div className="flex items-center justify-between text-xs text-gray-400">

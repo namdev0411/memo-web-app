@@ -16,7 +16,8 @@
         "confirm": "Xác nhận",
         "close": "Đóng",
         "next": "Tiếp theo",
-        "previous": "Trước đó"
+        "previous": "Trước đó",
+        "preview": "Xem trước"
     },
     "auth": {
         "loginWithSalesforce": "Đăng nhập với Salesforce",
@@ -51,7 +52,13 @@
         "confirmDelete": "Bạn có chắc chắn muốn xóa ghi chú này?",
         "deleteMemoTitle": "Xóa ghi chú",
         "lastModified": "Sửa đổi lần cuối",
-        "createdAt": "Được tạo lúc"
+        "createdAt": "Được tạo lúc",
+        "htmlSupported": "(Hỗ trợ HTML)",
+        "htmlSupportedHint": "Hỗ trợ thẻ HTML để định dạng văn bản phong phú",
+        "markdownSupported": "Hỗ trợ Markdown để định dạng phong phú",
+        "richTextSupported": "Hỗ trợ định dạng văn bản phong phú",
+        "useToolbarFormatting": "Sử dụng thanh công cụ để in đậm, in nghiêng, danh sách, v.v.",
+        "charactersNoHTML": "ký tự (không tính HTML)"
     },
     "navigation": {
         "home": "Trang chủ",

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import axios from '../utils/axios';
+import { getMemoById, deleteMemo } from '../services/memoService';
+import { formatTextContent } from '../utils/htmlUtils';
+import DOMPurify from 'dompurify';
 
 const ViewMemo = () => {
     const { id } = useParams();
@@ -20,13 +22,13 @@ const ViewMemo = () => {
             setLoading(true);
             console.log('👁️ Loading memo details:', id);
 
-            const response = await axios.get(`/api/memo/update/${id}`);
+            const response = await getMemoById(id);
 
-            if (response.data.success) {
-                setMemo(response.data.data);
-                console.log('✅ Loaded memo details:', response.data.data);
+            if (response.success) {
+                setMemo(response.data);
+                console.log('✅ Loaded memo details:', response.data);
             } else {
-                setError(response.data.message);
+                setError(response.message);
             }
         } catch (err) {
             console.error('❌ Cannot load memo:', err);
@@ -39,11 +41,11 @@ const ViewMemo = () => {
     const handleDelete = async () => {
         if (window.confirm(t('memo.confirmDelete'))) {
             try {
-                const response = await axios.delete(`/api/memo/${id}`);
-                if (response.data.success) {
+                const response = await deleteMemo(id);
+                if (response.success) {
                     navigate('/');
                 } else {
-                    alert(t('errors.somethingWentWrong') + ': ' + response.data.message);
+                    alert(t('errors.somethingWentWrong') + ': ' + response.message);
                 }
             } catch (err) {
                 alert(t('memo.memoError') + ': ' + err.message);
@@ -179,9 +181,17 @@ const ViewMemo = () => {
                     <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-4">{t('memo.content')}</h3>
                     <div className="prose max-w-none">
                         <div className="bg-gray-50 rounded-lg p-4 sm:p-6 border border-gray-200">
-                            <p className="text-gray-800 leading-relaxed whitespace-pre-wrap text-sm sm:text-base break-words">
-                                {memo.description}
-                            </p>
+                            <div
+                                className="text-gray-800 leading-relaxed text-sm sm:text-base break-words memo-content"
+                                dangerouslySetInnerHTML={{
+                                    __html: DOMPurify.sanitize(formatTextContent(memo.description))
+                                }}
+                                style={{
+                                    lineHeight: '1.6',
+                                    wordWrap: 'break-word',
+                                    overflowWrap: 'break-word'
+                                }}
+                            />
                         </div>
                     </div>
                 </div>
@@ -200,23 +210,6 @@ const ViewMemo = () => {
                         <span className="text-gray-500">
                             #{memo.id.slice(-6)}
                         </span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Tips */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <div className="flex items-start">
-                    <svg className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <div className="text-sm">
-                        <p className="font-medium text-blue-900 mb-1">💡 Actions:</p>
-                        <ul className="text-blue-800 space-y-1 text-xs sm:text-sm">
-                            <li>• {t('common.edit')} - {t('memo.editMemo')}</li>
-                            <li>• {t('common.delete')} - {t('memo.deleteMemo')}</li>
-                            <li>• {t('common.back')} - {t('navigation.home')}</li>
-                        </ul>
                     </div>
                 </div>
             </div>

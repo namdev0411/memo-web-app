@@ -1,13 +1,188 @@
 @import "tailwindcss";
+
 @layer base {
   html {
     font-family: 'Inter', system-ui, sans-serif;
   }
-  
+
   body {
     margin: 0;
     min-height: 100vh;
   }
 }
 
+/* Rich text content styling */
+@layer components {
+  .memo-content p {
+    margin-bottom: 1rem;
+  }
 
+  .memo-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .memo-content strong {
+    font-weight: 600;
+    color: #1f2937;
+  }
+
+  .memo-content em {
+    font-style: italic;
+    color: #374151;
+  }
+
+  .memo-content ul,
+  .memo-content ol {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+  }
+
+  .memo-content ul li {
+    list-style-type: disc;
+    margin-bottom: 0.5rem;
+  }
+
+  .memo-content ol li {
+    list-style-type: decimal;
+    margin-bottom: 0.5rem;
+  }
+
+  .memo-content h1,
+  .memo-content h2,
+  .memo-content h3 {
+    font-weight: 600;
+    margin: 1.5rem 0 1rem 0;
+    color: #1f2937;
+  }
+
+  .memo-content h1 {
+    font-size: 1.5rem;
+  }
+
+  .memo-content h2 {
+    font-size: 1.25rem;
+  }
+
+  .memo-content h3 {
+    font-size: 1.125rem;
+  }
+
+  .memo-content a {
+    color: #2563eb;
+    text-decoration: underline;
+  }
+
+  .memo-content a:hover {
+    color: #1d4ed8;
+  }
+}
+
+/* Quill Editor Custom Styling */
+@layer components {
+  .quill-editor {
+    background: white;
+  }
+
+  .quill-editor .ql-toolbar {
+    border-top: 1px solid #d1d5db;
+    border-left: 1px solid #d1d5db;
+    border-right: 1px solid #d1d5db;
+    border-bottom: none;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    background: #f9fafb;
+    padding: 8px 12px;
+  }
+
+  .quill-editor .ql-container {
+    border-bottom: 1px solid #d1d5db;
+    border-left: 1px solid #d1d5db;
+    border-right: 1px solid #d1d5db;
+    border-top: none;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    font-size: 14px;
+  }
+
+  .quill-editor .ql-editor {
+    min-height: 200px;
+    padding: 12px 16px;
+    line-height: 1.6;
+    color: #1f2937;
+  }
+
+  .quill-editor .ql-editor.ql-blank::before {
+    color: #9ca3af;
+    font-style: normal;
+  }
+
+  .quill-editor:focus-within .ql-toolbar {
+    border-color: #3b82f6;
+  }
+
+  .quill-editor:focus-within .ql-container {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+  }
+
+  /* Toolbar button styling */
+  .quill-editor .ql-toolbar .ql-picker-label {
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  .quill-editor .ql-toolbar .ql-picker-label:hover {
+    background: #e5e7eb;
+  }
+
+  .quill-editor .ql-toolbar button {
+    border-radius: 4px;
+    padding: 4px;
+    margin: 0 2px;
+  }
+
+  .quill-editor .ql-toolbar button:hover {
+    background: #e5e7eb;
+  }
+
+  .quill-editor .ql-toolbar button.ql-active {
+    background: #dbeafe;
+    color: #2563eb;
+  }
+
+  /* Fix popup/tooltip z-index issues */
+  .quill-editor .ql-tooltip {
+    z-index: 50;
+    position: absolute;
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .quill-editor .ql-tooltip.ql-editing {
+    z-index: 51;
+  }
+
+  .quill-editor .ql-tooltip input[type=text] {
+    border: 1px solid #d1d5db;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .quill-editor .ql-tooltip a.ql-action,
+  .quill-editor .ql-tooltip a.ql-remove {
+    margin-left: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    text-decoration: none;
+  }
+
+  .quill-editor .ql-tooltip a.ql-action:hover,
+  .quill-editor .ql-tooltip a.ql-remove:hover {
+    background: #f3f4f6;
+  }
+}

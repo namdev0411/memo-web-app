@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { clearSalesforceTokens, getAccessToken, getInstanceUrl } from './auth.js';
 
 // Tạo instance với cấu hình động
 const instance = axios.create({
@@ -10,13 +11,13 @@ const instance = axios.create({
 // Interceptor để thêm access token và sử dụng instance_url động
 instance.interceptors.request.use(
   (config) => {
-    const accessToken = localStorage.getItem('salesforce_access_token');
-    const instanceUrl = localStorage.getItem('salesforce_instance_url');
-    
+    const accessToken = getAccessToken();
+    const instanceUrl = getInstanceUrl();
+
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
-    
+
     // Sử dụng instance_url động thay vì baseURL cố định
     if (instanceUrl && !config.url.startsWith('http')) {
       config.baseURL = `${instanceUrl}/services/apexrest`;
@@ -26,7 +27,7 @@ instance.interceptors.request.use(
       config.baseURL = import.meta.env.VITE_SALESFORCE_API_BASE_URL;
       console.log('🔄 Fallback về baseURL:', config.baseURL);
     }
-    
+
     console.log('📤 Request config:', {
       url: config.url,
       baseURL: config.baseURL,
@@ -35,7 +36,7 @@ instance.interceptors.request.use(
         Authorization: config.headers.Authorization ? 'Bearer [TOKEN]' : undefined
       }
     });
-    
+
     return config;
   },
   (error) => {
@@ -61,14 +62,11 @@ instance.interceptors.response.use(
       data: error.response?.data,
       message: error.message
     });
-    
+
     if (error.response?.status === 401) {
       console.warn('🔐 Token expired hoặc không hợp lệ, redirect to login');
-    //   localStorage.removeItem('salesforce_access_token');
-    //   localStorage.removeItem('salesforce_instance_url');
-    //   localStorage.removeItem('salesforce_refresh_token');
-    //   localStorage.removeItem('salesforce_token_expires_at');
-    //   window.location.href = '/login';
+      clearSalesforceTokens();
+      window.location.href = '/login';
     }
     return Promise.reject(error);
   }

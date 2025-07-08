@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { stripHtml } from '../utils/htmlUtils';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const MemoForm = ({
   initialData = null,
@@ -39,9 +42,16 @@ const MemoForm = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation
-    if (!formData.name.trim() || !formData.description.trim()) {
+    // Validation - check if content has actual text (not just HTML tags)
+    const plainTextContent = stripHtml(formData.description).trim();
+    if (!formData.name.trim() || !plainTextContent) {
       setError(t('memo.titleRequired') + ' & ' + t('memo.descriptionRequired'));
+      return;
+    }
+
+    // Check character limit
+    if (plainTextContent.length > 5000) {
+      setError(t('memo.contentTooLong'));
       return;
     }
 
@@ -97,20 +107,39 @@ const MemoForm = ({
         <label htmlFor="memo-description" className="block text-sm font-medium text-gray-700 mb-2">
           {t('memo.content')} <span className="text-red-500">*</span>
         </label>
-        <textarea
-          id="memo-description"
-          value={formData.description}
-          onChange={(e) => handleChange('description', e.target.value)}
-          placeholder={`${t('memo.content')}...`}
-          rows={6}
-          required
-          className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-gray-900 placeholder-gray-500 resize-none text-sm sm:text-base"
-          maxLength={5000}
-          disabled={loading}
-        />
-        <p className="text-xs text-gray-500 mt-1">
-          {formData.description.length}/5000
-        </p>
+
+        <div className="quill-editor">
+          <ReactQuill
+            value={formData.description}
+            onChange={(content) => handleChange('description', content)}
+            readOnly={loading}
+            theme="snow"
+            placeholder={`${t('memo.content')}...`}
+            modules={{
+              toolbar: [
+                [{ 'header': [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                [{ 'align': [] }],
+                ['link'],
+                ['clean']
+              ]
+            }}
+            formats={[
+              'header', 'bold', 'italic', 'underline', 'strike',
+              'list', 'bullet', 'align', 'link'
+            ]}
+          />
+        </div>
+
+        <div className="flex justify-between items-center mt-2">
+          <p className="text-xs text-gray-500">
+            {t('memo.richTextSupported')}
+          </p>
+          <p className="text-xs text-gray-500">
+            {stripHtml(formData.description).length} / 5000 {t('memo.charactersNoHTML')}
+          </p>
+        </div>
       </div>
 
       {/* Form Actions */}
@@ -129,7 +158,7 @@ const MemoForm = ({
 
         <button
           type="submit"
-          disabled={loading || !formData.name.trim() || !formData.description.trim()}
+          disabled={loading || !formData.name.trim() || !stripHtml(formData.description).trim()}
           className="inline-flex items-center justify-center px-5 sm:px-6 py-3 sm:py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg shadow-md hover:from-blue-600 hover:to-blue-700 hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-md text-sm sm:text-base min-h-[44px] sm:min-h-[40px]"
         >
           {loading ? (
@@ -162,7 +191,8 @@ const MemoForm = ({
             <ul className="text-blue-800 space-y-1 text-xs sm:text-sm">
               <li>• {t('memo.titleRequired')}</li>
               <li>• {t('memo.contentRequired')}</li>
-              <li>• Markdown supported</li>
+              <li>• {t('memo.richTextSupported')}</li>
+              <li>• {t('memo.useToolbarFormatting')}</li>
             </ul>
           </div>
         </div>

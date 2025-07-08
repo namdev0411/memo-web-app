@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { setTokens } from '../utils/auth.js';
 
 const AuthCallback = () => {
     const [error, setError] = useState(null);
@@ -54,37 +55,31 @@ const AuthCallback = () => {
             return;
         }
 
-        // Lưu token trực tiếp (không cần gọi API)
+        // Lưu token sử dụng hàm dùng chung
         console.log('✅ Lưu access token...');
-        localStorage.setItem('salesforce_access_token', accessToken);
 
         // Lấy thêm thông tin từ URL fragment nếu có
         const instanceUrl = hashParams.get('instance_url');
         const refreshToken = hashParams.get('refresh_token');
         const scope = hashParams.get('scope');
 
+        // Sử dụng hàm setTokens để lưu thông tin
+        const decodedInstanceUrl = instanceUrl ? decodeURIComponent(instanceUrl) : null;
+        const expiresIn = 2 * 60 * 60; // 2 giờ cho Implicit Grant
 
-        if (instanceUrl) {
-            localStorage.setItem('salesforce_instance_url', decodeURIComponent(instanceUrl));
-        }
-        if (refreshToken) {
-            localStorage.setItem('salesforce_refresh_token', refreshToken);
-        }
+        setTokens(accessToken, decodedInstanceUrl, refreshToken, expiresIn);
+
         if (scope) {
             localStorage.setItem('salesforce_scope', decodeURIComponent(scope));
         }
-
-        // Lưu thời gian hết hạn token (thường là 2 giờ cho Implicit Grant)
-        const expiresAt = Date.now() + (2 * 60 * 60 * 1000);
-        localStorage.setItem('salesforce_token_expires_at', expiresAt.toString());
 
         localStorage.removeItem('oauth_state'); // Dọn dẹp
 
         console.log('🎉 Xác thực thành công với Implicit Grant!');
         console.log('📊 Stored data:', {
             access_token: '✅ Stored',
-            instance_url: localStorage.getItem('salesforce_instance_url'),
-            refresh_token: !!localStorage.getItem('salesforce_refresh_token') ? '✅ Stored' : '❌ None'
+            instance_url: decodedInstanceUrl || '❌ None',
+            refresh_token: refreshToken ? '✅ Stored' : '❌ None'
         });
 
         setLoading(false);

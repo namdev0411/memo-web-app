@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import MemoForm from '../components/MemoForm';
-import axios from '../utils/axios';
+import { getMemoById, updateMemo } from '../services/memoService';
 
 const EditMemo = () => {
   const { id } = useParams();
@@ -22,13 +22,13 @@ const EditMemo = () => {
   const fetchMemo = async () => {
     try {
       setLoadingMemo(true);
-      const response = await axios.get(`/api/memo/update/${id}`);
+      const response = await getMemoById(id);
 
-      if (response.data.success) {
-        setInitialData(response.data.data);
+      if (response.success) {
+        setInitialData(response.data);
       } else {
-        console.error('❌ Failed to fetch memo:', response.data.message);
-        alert(t('memo.memoError') + ': ' + response.data.message);
+        console.error('❌ Failed to fetch memo:', response.message);
+        alert(t('memo.memoError') + ': ' + response.message);
         navigate('/');
       }
     } catch (error) {
@@ -43,10 +43,10 @@ const EditMemo = () => {
   const handleSubmit = async (memoData) => {
     setLoading(true);
     try {
-      const response = await axios.patch(`/api/memo/update/${id}`, memoData);
+      const response = await updateMemo(id, memoData);
 
-      if (response.data.success) {
-        console.log('✅ Memo updated successfully:', response.data.data);
+      if (response.success) {
+        console.log('✅ Memo updated successfully:', response.data);
 
         // Nếu đến từ trang view, quay lại trang view, nếu không thì về home
         if (fromView) {
@@ -55,8 +55,8 @@ const EditMemo = () => {
           navigate('/');
         }
       } else {
-        console.error('❌ Failed to update memo:', response.data.message);
-        alert(t('memo.memoError') + ': ' + response.data.message);
+        console.error('❌ Failed to update memo:', response.message);
+        alert(t('memo.memoError') + ': ' + response.message);
       }
     } catch (error) {
       console.error('❌ Error updating memo:', error);

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import MemoForm from '../components/MemoForm';
-import axios from '../utils/axios';
+import { createMemo } from '../services/memoService';
 
 const NewMemo = () => {
   const navigate = useNavigate();
@@ -12,14 +12,14 @@ const NewMemo = () => {
   const handleSubmit = async (memoData) => {
     setLoading(true);
     try {
-      const response = await axios.post('/api/memo', memoData);
+      const response = await createMemo(memoData);
 
-      if (response.data.success) {
-        console.log('✅ Memo created successfully:', response.data.data);
+      if (response.success) {
+        console.log('✅ Memo created successfully:', response.data);
         navigate('/');
       } else {
-        console.error('❌ Failed to create memo:', response.data.message);
-        alert(t('memo.memoError') + ': ' + response.data.message);
+        console.error('❌ Failed to create memo:', response.message);
+        alert(t('memo.memoError') + ': ' + response.message);
       }
     } catch (error) {
       console.error('❌ Error creating memo:', error);
