@@ -21,14 +21,14 @@ const MemoForm = ({
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (initialData) {
+    if (initialData && !loading) {
       setFormData({
         name: initialData.name || '',
         description: initialData.description || '',
         actionDateTime: initialData.actionDateTime ? toJstDatetimeLocalValue(initialData.actionDateTime) : ''
       });
     }
-  }, [initialData]);
+  }, [initialData, loading]);
 
   const handleChange = (field, value) => {
     setFormData(prev => ({
