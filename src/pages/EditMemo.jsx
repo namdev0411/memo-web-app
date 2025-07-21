@@ -41,6 +41,8 @@ const EditMemo = () => {
   };
 
   const handleSubmit = async (memoData) => {
+    console.log('Submitting memo data:', memoData);
+
     setLoading(true);
     try {
       const response = await updateMemo(id, memoData);
@@ -109,7 +111,11 @@ const EditMemo = () => {
       <div className="bg-white rounded-lg shadow-sm border border-gray-200">
         <div className="p-4 sm:p-6">
           <MemoForm
-            initialData={initialData}
+            initialData={{
+              ...initialData,
+              actionDateTime: initialData.actionDateTime,
+              actionDateTimeFormatted: initialData.actionDateTimeFormatted
+            }}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
             loading={loading}

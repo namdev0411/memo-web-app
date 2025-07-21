@@ -80,5 +80,6 @@
         "english": "English",
         "vietnamese": "Tiếng Việt",
         "japanese": "日本語"
-    }
+    },
+    "actionDateTime": "Scheduled Date"
 }

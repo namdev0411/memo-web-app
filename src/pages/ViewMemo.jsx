@@ -168,6 +168,14 @@ const ViewMemo = () => {
                                     <span className="hidden sm:inline">{t('memo.lastModified')}: </span>
                                     {new Date(memo.lastModifiedDate).toLocaleDateString()}
                                 </span>
+                                {memo.actionDateTimeFormatted && (
+                                    <span className="flex items-center">
+                                        <svg className="w-4 h-4 mr-1 flex-shrink-0 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                        <span>{t('memo.actionDateTime')}: {memo.actionDateTimeFormatted}</span>
+                                    </span>
+                                )}
                             </div>
                         </div>
                         <div className="text-xs text-gray-500 bg-white px-3 py-1 rounded-full font-mono self-start">

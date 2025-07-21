@@ -58,7 +58,8 @@
         "markdownSupported": "リッチフォーマットのMarkdown対応",
         "richTextSupported": "リッチテキスト書式設定に対応",
         "useToolbarFormatting": "太字、斜体、リストなどはツールバーを使用",
-        "charactersNoHTML": "文字（HTML除く）"
+        "charactersNoHTML": "文字（HTML除く）",
+        "actionDateTime": "予定日"
     },
     "navigation": {
         "home": "ホーム",

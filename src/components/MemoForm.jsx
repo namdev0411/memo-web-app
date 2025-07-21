@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { stripHtml } from '../utils/htmlUtils';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { toJstDatetimeLocalValue, convertISOToLocal } from '../services/jstDatetime';
 
 const MemoForm = ({
   initialData = null,
@@ -13,7 +14,8 @@ const MemoForm = ({
 }) => {
   const [formData, setFormData] = useState({
     name: '',
-    description: ''
+    description: '',
+    actionDateTime: ''
   });
   const [error, setError] = useState(null);
   const { t } = useTranslation();
@@ -22,7 +24,8 @@ const MemoForm = ({
     if (initialData) {
       setFormData({
         name: initialData.name || '',
-        description: initialData.description || ''
+        description: initialData.description || '',
+        actionDateTime: initialData.actionDateTime ? toJstDatetimeLocalValue(initialData.actionDateTime) : ''
       });
     }
   }, [initialData]);
@@ -57,7 +60,8 @@ const MemoForm = ({
 
     const submitData = {
       name: formData.name.trim(),
-      description: formData.description.trim()
+      description: formData.description.trim(),
+      actionDateTime: formData.actionDateTime ? convertISOToLocal(formData.actionDateTime) : ''
     };
 
     try {
@@ -140,6 +144,27 @@ const MemoForm = ({
             {stripHtml(formData.description).length} / 5000 {t('memo.charactersNoHTML')}
           </p>
         </div>
+      </div>
+
+      {/* actionDateTime Field */}
+      <div>
+        <label htmlFor="memo-action-date" className="block text-sm font-medium text-gray-700 mb-2">
+          予定日
+        </label>
+        <input
+          id="memo-action-date"
+          type="datetime-local"
+          value={formData.actionDateTime}
+          onChange={(e) => handleChange('actionDateTime', e.target.value)}
+          className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 text-gray-900 placeholder-gray-500 text-sm sm:text-base"
+          disabled={loading}
+        />
+        {/* Hiển thị JST đẹp cho người dùng xác nhận */}
+        {initialData && initialData.actionDateTimeFormatted && (
+          <div className="text-xs text-gray-500 mt-1">
+            {t('memo.actionDateTime')}: {initialData.actionDateTimeFormatted} (JST)
+          </div>
+        )}
       </div>
 
       {/* Form Actions */}

@@ -12,7 +12,10 @@ const NewMemo = () => {
   const handleSubmit = async (memoData) => {
     setLoading(true);
     try {
-      const response = await createMemo(memoData);
+      const response = await createMemo({
+        ...memoData,
+        actionDateTime: memoData.actionDateTime,
+      });
 
       if (response.success) {
         console.log('✅ Memo created successfully:', response.data);
